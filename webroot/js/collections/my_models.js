@@ -3,7 +3,7 @@ define([
 	'models/my_model'
 ], function(Backbone, MyModel){
 	var MyModels = Backbone.Collection.extend({
-		model: MyModel,
+		model: MyModel
 	});
 	return MyModels;
 });

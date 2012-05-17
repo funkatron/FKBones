@@ -1,5 +1,5 @@
 define([
-	'libs/backbone',
+	'libs/backbone'
 ], function(Backbone){
 	var MyModel = Backbone.Model.extend({
 	});
