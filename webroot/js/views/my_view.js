@@ -1,8 +1,8 @@
 define([
 	'libs/backbone',
-	'libs/hbt!templates/my_template.html'
+	'libs/hbt!templates/my_template.html' // this uses hbt.js to compile the template
 ], function(Backbone, MyTemplate){
-	var Fandom = Backbone.View.extend({
+	var MyView = Backbone.View.extend({
 		tagName: 'div',
 		className: 'block',
 		initialize: function() {
@@ -20,5 +20,5 @@ define([
 			this.model.set({'motto': '(dealwithit)'});
 		}
 	});
-	return Fandom;
+	return MyView;
 });
