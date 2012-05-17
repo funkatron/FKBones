@@ -8,23 +8,23 @@ Explanation
 -----------
 Start in index.html
 This line:
-	<script type='text/javascript' data-main='/js/apps/my_app' src='/js/libs/require-min.js' charset='UTF-8'></script>
+    <script type='text/javascript' data-main='/js/apps/my_app' src='/js/libs/require-min.js' charset='UTF-8'></script>
 Is the require.js script.  The data-main attribute is the url of the top-level script that the loader....loads.  For some reason require.js doesn't use filename for js files so it's just /js/apps/my_app.
 
 A quick discussion about directory structure: the way I typically structure stuff is as follows:
-	js/apps - this would be like the "controller" in MVC - responsible for linking up views with models
-	js/collections - Backbone collections (which are typically just holders of Backbone models)
-	js/libs - 3rd party libraries
-	js/models - Backbone models (talks to server, serializes to JSON, triggers change events)
-	js/templates - handlebars.js templates
-	js/util - Utility functions written by me
-	js/views - Backbone views (render models, delegate DOM events)
+    js/apps - this would be like the "controller" in MVC - responsible for linking up views with models
+    js/collections - Backbone collections (which are typically just holders of Backbone models)
+    js/libs - 3rd party libraries
+    js/models - Backbone models (talks to server, serializes to JSON, triggers change events)
+    js/templates - handlebars.js templates
+    js/util - Utility functions written by me
+    js/views - Backbone views (render models, delegate DOM events)
 
 Ok, so now let's look at /js/apps/my_app.js
 The first 3 lines set the baseUrl of all files that will subsequently be loaded.  This lets the subsequent define()'s be shorter, but more importantly lets us do things like load off the VM in development mode, but from a CDN with a totally different hostname in production.  (The way you would do this would be to put the value of the baseUrl attribute into a javascript variable in the html, then use that instead of the hardcoded string 'js')
 
 Next, is the define.  Every file that is loaded with require.js should have one of these.  The first argument is an array of strings which represent paths to JS files to load.  The second argument is a function.  Note that the function takes a number of arguments - these are the return values of the files included due to the first argument of define(). So, if you look at models/my_model, you'll see that it returns a Backbone model.  This model is what becomes the second argument to the function in apps/my_app.js: function($, MyModel, MyView) {
-								^^^^^ This one!!!!!
+                                                ^^^^^ This one!!!!!
 
 OK, line 11: var model = new MyModel(window.model);
 This instantiates a model class with attributes taken from window.model (defined in index.html).  Backbone models are just a bag of attributes - you don't define a schema or anything.  They're just a thin wrapper around JS objects
@@ -44,7 +44,7 @@ It should be pretty simple to see what's going on with rendering if you look at 
 
 
 Ok, so we have now rendered a view, so what happens when I click on that link? ("I am a link").  Note that we have data-remote="true" and data-method="POST" as attributes on it.  This is a UJS thing.  When a link with data-remote is clicked, UJS intercepts it, prevents the default handler (i.e., visiting the link), and does an AJAX request to the server (path: href attribute, method: data-method attribute, additional params: data-params attribute (not present in this example)).  It also triggers the jQuery AJAX lifecycle events on the <a> tag.  Now, if you look at views/my_view.js line 17, you see that we bind to an ajax:error event (note that all Backbone events are scoped to the view element; so we're only going to see events that take place inside the #my-view element in this example).  I'm binding to ajax:error because there's no server handler set up because I'm lazy; normally you would have a server and bind to ajax:success.  Anyway, when ajax:error is triggered, we call ajaxError in the view. In that function, I'm changing the value of the "motto" attribute of the model.  Again, normally you would do something like:
-	this.model.set(ajaxResponseData);
+    this.model.set(ajaxResponseData);
 Where ajaxResponseData is an updated model coming back from the server.
 Ok, so we set that field; this triggers a change event.  And you'll remember that back on line 9 of the view we bound an event handler to that change event.  So once we set the 'motto' field, the view's "render" function is triggered, which goes in and replaces the HTML of the view element with the new stuff.
 
