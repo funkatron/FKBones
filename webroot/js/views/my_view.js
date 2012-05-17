@@ -14,10 +14,15 @@ define([
 			return this;
 		},
 		events: {
-			'ajax:error a': 'ajaxError'
+			'ajax:error a': 'ajaxError',
+			'click .close': 'close'
 		},
 		ajaxError: function() {
 			this.model.set({'motto': '(dealwithit)'});
+		},
+		close: function() {
+			this.remove();
+			return false;
 		}
 	});
 	return Fandom;
