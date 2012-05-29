@@ -4,11 +4,15 @@ require.config({
 
 define([
 	'libs/jquery',
+	'util/dispatcher',
 	'models/my_model',
 	'collections/my_collection',
 	'views/my_view',
 	'libs/ujs'
-], function($, MyModel, MyCollection, MyView) {
+], function($, Dispatcher, MyModel, MyCollection, MyView) {
+	Dispatcher.bind('click', function(hello) {
+		console.log(hello);
+	});
 	var App = Backbone.View.extend({
 		initialize: function() {
 			this.collection = new MyCollection(window.collection);
@@ -28,6 +32,7 @@ define([
 		},
 		renderModel: function(model) {
 			var view = new MyView({model: model});
+			Dispatcher.broadcast(view, 'click');
 			$('#my-view').append(view.el);
 		}
 	});

@@ -15,7 +15,8 @@ define([
 		},
 		events: {
 			'ajax:error a': 'ajaxError',
-			'click .close': 'close'
+			'click .close': 'close',
+			'click .link a': 'click'
 		},
 		ajaxError: function() {
 			this.model.set({'motto': '(dealwithit)'});
@@ -23,6 +24,9 @@ define([
 		close: function() {
 			this.remove();
 			return false;
+		},
+		click: function() {
+			this.trigger('click', 'hello, world!');
 		}
 	});
 	return MyView;
