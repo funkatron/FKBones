@@ -3,7 +3,7 @@ define([
 	'libs/backbone'
 ], function(_, Backbone){
 	function Dispatcher() {}
-	_.extend(Dispatcher.prototype, {
+	_.extend(Dispatcher.prototype, Backbone.Events, {
 		broadcast: function(obj, event) {
 			obj.bind(event, function() {
 				var args = Array.prototype.slice.call(arguments, 0);
@@ -12,5 +12,5 @@ define([
 			}, this);
 		}
 	});
-	return _.extend(new Dispatcher(), Backbone.Events);
+	return new Dispatcher();
 });
