@@ -10,9 +10,6 @@ define([
 	'views/my_view',
 	'libs/ujs'
 ], function($, Dispatcher, MyModel, MyCollection, MyView) {
-	Dispatcher.bind('click', function(hello) {
-		console.log(hello);
-	});
 	var App = Backbone.View.extend({
 		initialize: function() {
 			this.collection = new MyCollection(window.collection);
@@ -32,9 +29,13 @@ define([
 		},
 		renderModel: function(model) {
 			var view = new MyView({model: model});
-			Dispatcher.broadcast(view, 'click');
+			Dispatcher.broadcast(view, 'my_view:click');
 			$('#my-view').append(view.el);
+		},
+		clickHandler: function(hello) {
+			console.log('i am a click handler:', hello);
 		}
 	});
-	new App({el: document.body});
+	var app = new App({el: document.body});
+	Dispatcher.bind('my_view:click', app.clickHandler, app);
 });

@@ -26,7 +26,7 @@ define([
 			return false;
 		},
 		click: function() {
-			this.trigger('click', 'hello, world!');
+			this.trigger('my_view:click', 'hello, world!');
 		}
 	});
 	return MyView;
